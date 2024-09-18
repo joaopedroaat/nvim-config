@@ -18,6 +18,42 @@ require("lazy").setup({
   spec = {
     -- add LazyVim and import its plugins
     { "LazyVim/LazyVim", import = "lazyvim.plugins" },
+
+    -- typescript
+    { import = "lazyvim.plugins.extras.lang.typescript" },
+    { import = "lazyvim.plugins.extras.linting.eslint" },
+    { import = "lazyvim.plugins.extras.formatting.prettier" },
+
+    -- json
+    { import = "lazyvim.plugins.extras.lang.json" },
+
+    -- docker
+    { import = "lazyvim.plugins.extras.lang.docker" },
+
+    -- golang
+    { import = "lazyvim.plugins.extras.lang.go" },
+
+    -- markdown
+    { import = "lazyvim.plugins.extras.lang.markdown" },
+
+    -- tailwindcss
+    { import = "lazyvim.plugins.extras.lang.tailwind" },
+
+    -- yaml
+    { import = "lazyvim.plugins.extras.lang.yaml" },
+
+    -- toml
+    { import = "lazyvim.plugins.extras.lang.toml" },
+
+    -- python
+    { import = "lazyvim.plugins.extras.lang.python" },
+
+    -- git
+    { import = "lazyvim.plugins.extras.lang.git" },
+
+    -- sql
+    { import = "lazyvim.plugins.extras.lang.sql" },
+
     -- import/override with your plugins
     { import = "plugins" },
   },
