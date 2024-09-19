@@ -1,15 +1,36 @@
 return {
   "ThePrimeagen/harpoon",
-  config = true,
-  init = function()
-    local mark = require("harpoon.mark")
-    local ui = require("harpoon.ui")
-    vim.keymap.set("n", "ma", mark.add_file, { desc = "Mark File" })
-    vim.keymap.set("n", "mq", ui.toggle_quick_menu, { desc = "Find Marks" })
-    vim.keymap.set("n", "mn", ui.nav_next, { desc = "Next Mark" })
-    vim.keymap.set("n", "mp", ui.nav_prev, { desc = "Prev Mark" })
-  end,
-  dependencies = {
+  keys = {
+    {
+      "<leader>mq",
+      function()
+        require("harpoon.ui").toggle_quick_menu()
+      end,
+      desc = "Harpoon Quick Menu",
+    },
+    {
+      "<leader>ma",
+      function()
+        require("harpoon.mark").add_file()
+      end,
+      desc = "Harpoon Add File",
+    },
+    {
+      "<leader>mp",
+      function()
+        require("harpoon.ui").nav_prev()
+      end,
+      desc = "Harpoon Prev File",
+    },
+    {
+      "<leader>mn",
+      function()
+        require("harpoon.ui").nav_next()
+      end,
+      desc = "Harpoon Next File",
+    },
+  },
+  dependenceis = {
     "nvim-lua/plenary.nvim",
   },
 }
