@@ -4,6 +4,5 @@
 local opt = vim.opt
 
 opt.colorcolumn = "80"
-opt.textwidth = 80
-
-vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
+opt.spelllang = { "en_us", "pt_br" }
+opt.wrap = true
