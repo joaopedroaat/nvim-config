@@ -17,5 +17,40 @@ return {
       end,
       desc = "Find Files",
     },
+    {
+      "<leader>fh",
+      function()
+        require("fzf-lua").help_tags()
+      end,
+      desc = "Find Help Tags",
+    },
+    {
+      "<leader><leader>",
+      function()
+        require("fzf-lua").buffers()
+      end,
+      desc = "Find Buffers",
+    },
+    {
+      "<leader>/",
+      function()
+        require("fzf-lua").lgrep_curbuf()
+      end,
+      desc = "Live Grep (Buffer)",
+    },
+    {
+      "<leader>fg",
+      function()
+        require("fzf-lua").lgrep_curbuf()
+      end,
+      desc = "Live Grep (Workspace)",
+    },
+    {
+      "<leader>fc",
+      function()
+        require("fzf-lua").files({ cwd = vim.fn.stdpath("config") })
+      end,
+      desc = "Find Config Files",
+    },
   }
 }
