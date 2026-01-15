@@ -1,4 +1,5 @@
 {
+  "conform.nvim": { "branch": "master", "commit": "238f542a118984a88124fc915d5b981680418707" },
   "fzf-lua": { "branch": "main", "commit": "578a11f9f7c5f4436b833731ccceeda9479562f0" },
   "gruvbox-material": { "branch": "master", "commit": "e4359a2f80ef7275b080be180841c62ca8322757" },
   "lazy.nvim": { "branch": "main", "commit": "85c7ff3711b730b4030d03144f6db6375044ae82" },
