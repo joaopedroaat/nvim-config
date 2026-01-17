@@ -18,6 +18,7 @@ return {
 			"markdown_inline",
 			-- Golang
 			"go",
+			"templ",
 			-- Json
 			"json",
 			"json5",
@@ -33,5 +34,12 @@ return {
 			local installed = require("nvim-treesitter").get_installed()
 			vim.print(installed)
 		end, { desc = "List installed Tree-sitter parsers" })
+
+		vim.api.nvim_create_autocmd("FileType", {
+			pattern = { "templ" },
+			callback = function()
+				vim.treesitter.start()
+			end,
+		})
 	end,
 }
