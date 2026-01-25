@@ -4,6 +4,11 @@ return {
 		formatters_by_ft = {
 			lua = { "stylua" },
 			go = { "goimports_reviser" },
+			-- HTML, JS, CSS
+			html = { "prettierd" },
+			javascript = { "prettierd" },
+			typescript = { "prettierd" },
+			css = { "prettierd" },
 		},
 		format_on_save = function(bufnr)
 			-- Disable autoformat on certain filetypes

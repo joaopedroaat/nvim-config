@@ -28,6 +28,8 @@ return {
 			"dockerfile",
 			-- Git
 			"gitignore",
+			-- Sql
+			"sql",
 		})
 
 		vim.api.nvim_create_user_command("TSInstallInfo", function()
@@ -36,7 +38,7 @@ return {
 		end, { desc = "List installed Tree-sitter parsers" })
 
 		vim.api.nvim_create_autocmd("FileType", {
-			pattern = { "templ" },
+			pattern = { "templ", "css" },
 			callback = function()
 				vim.treesitter.start()
 			end,
