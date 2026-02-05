@@ -3,7 +3,7 @@ return {
 	opts = {
 		formatters_by_ft = {
 			lua = { "stylua" },
-			go = { "goimports_reviser" },
+			go = { "goimports-reviser" },
 			-- HTML, JS, CSS
 			html = { "prettierd" },
 			javascript = { "prettierd" },
