@@ -24,13 +24,11 @@ return {
 			"sql",
 		})
 
-		-- Comando customizado que você já tinha
 		vim.api.nvim_create_user_command("TSInstallInfo", function()
 			local installed = ts.get_installed()
 			vim.print(installed)
 		end, { desc = "List installed Tree-sitter parsers" })
 
-		-- SOLUÇÃO: Habilitar highlight automático para parsers instalados
 		vim.api.nvim_create_autocmd("FileType", {
 			callback = function(args)
 				local lang = vim.treesitter.language.get_lang(vim.bo[args.buf].filetype) or vim.bo[args.buf].filetype
