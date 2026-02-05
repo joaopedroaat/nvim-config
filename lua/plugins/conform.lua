@@ -9,6 +9,7 @@ return {
 			javascript = { "prettierd" },
 			typescript = { "prettierd" },
 			css = { "prettierd" },
+			nix = { "nixfmt" },
 		},
 		format_on_save = function(bufnr)
 			-- Disable autoformat on certain filetypes

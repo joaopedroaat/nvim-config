@@ -3,44 +3,42 @@ return {
 	lazy = false,
 	build = ":TSUpdate",
 	config = function()
-		require("nvim-treesitter").install({
-			-- Lua
+		local ts = require("nvim-treesitter")
+
+		ts.install({
 			"lua",
-			-- Neovim
 			"vim",
 			"vimdoc",
-			-- HTML, JS, CSS
 			"html",
 			"javascript",
 			"css",
-			-- Markdown
 			"markdown",
 			"markdown_inline",
-			-- Golang
 			"go",
 			"templ",
-			-- Json
 			"json",
 			"json5",
-			-- Bash
 			"bash",
-			-- Docker
 			"dockerfile",
-			-- Git
 			"gitignore",
-			-- Sql
 			"sql",
 		})
 
+		-- Comando customizado que você já tinha
 		vim.api.nvim_create_user_command("TSInstallInfo", function()
-			local installed = require("nvim-treesitter").get_installed()
+			local installed = ts.get_installed()
 			vim.print(installed)
 		end, { desc = "List installed Tree-sitter parsers" })
 
+		-- SOLUÇÃO: Habilitar highlight automático para parsers instalados
 		vim.api.nvim_create_autocmd("FileType", {
-			pattern = { "templ", "css" },
-			callback = function()
-				vim.treesitter.start()
+			callback = function(args)
+				local lang = vim.treesitter.language.get_lang(vim.bo[args.buf].filetype) or vim.bo[args.buf].filetype
+				local is_installed = #vim.api.nvim_get_runtime_file("parser/" .. lang .. ".so", false) > 0
+
+				if is_installed then
+					vim.treesitter.start(args.buf, lang)
+				end
 			end,
 		})
 	end,
