@@ -41,7 +41,7 @@ return {
 		{
 			"<leader>fg",
 			function()
-				require("fzf-lua").lgrep_curbuf()
+				require("fzf-lua").live_grep()
 			end,
 			desc = "Live Grep (Workspace)",
 		},
@@ -51,6 +51,13 @@ return {
 				require("fzf-lua").files({ cwd = vim.fn.stdpath("config") })
 			end,
 			desc = "Find Config Files",
+		},
+		{
+			"<leader>fb",
+			function()
+				require("fzf-lua").builtin()
+			end,
+			desc = "FzfLua Builtin",
 		},
 	},
 }
