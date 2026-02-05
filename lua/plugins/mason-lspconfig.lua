@@ -7,4 +7,7 @@ return {
 		{ "mason-org/mason.nvim", opts = {} },
 		"neovim/nvim-lspconfig",
 	},
+	keys = {
+		{ "<leader>m", ":Mason<cr>", desc = "Mason" },
+	},
 }
