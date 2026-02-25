@@ -43,3 +43,8 @@ opt.sidescrolloff = 8 -- keeps 8 columns visible to the left and right of the cu
 opt.wrap = true -- enables line wrapping so long lines break and continue on the next screen line
 
 opt.spelllang = { "en", "pt_br" } -- spell languages
+
+opt.foldcolumn = "1" -- '0' is not bad
+opt.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
+opt.foldlevelstart = 99
+opt.foldenable = true
