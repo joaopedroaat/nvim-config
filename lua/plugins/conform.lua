@@ -11,6 +11,7 @@ return {
 			typescript = { "prettierd" },
 			css = { "prettierd" },
 			nix = { "nixfmt" },
+			templ = { "templ" },
 		},
 		format_on_save = function(bufnr)
 			-- Disable autoformat on certain filetypes
