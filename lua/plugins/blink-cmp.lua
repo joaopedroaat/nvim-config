@@ -25,6 +25,14 @@ return {
 					-- make lazydev completions top priority (see `:h blink.cmp`)
 					score_offset = 100,
 				},
+				-- Tell blink to load HTML snippets in Templ files
+				snippets = {
+					opts = {
+						extended_filetypes = {
+							templ = { "html" },
+						},
+					},
+				},
 			},
 		},
 
