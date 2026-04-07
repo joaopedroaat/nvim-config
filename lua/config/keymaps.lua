@@ -58,3 +58,14 @@ map("n", "gcO", "O<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", { desc = "Add Commen
 
 -- lazy
 map("n", "<leader>l", ":Lazy<cr>", { desc = "Lazy" })
+
+-- Open tmux-sessionizer in a floating popup
+map("n", "<C-f>", function()
+	if vim.env.TMUX ~= nil then
+		-- We are inside tmux. Talk directly to the OS to spawn the popup.
+		os.execute("tmux sessionizer")
+	else
+		-- We are outside tmux. Trying to attach from inside nvim will break your terminal.
+		vim.notify("Start tmux first to use the sessionizer!", vim.log.levels.WARN)
+	end
+end, { desc = "Tmux Sessionizer" })

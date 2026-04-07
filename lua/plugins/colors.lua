@@ -19,6 +19,11 @@ vim.api.nvim_create_autocmd("VimEnter", {
 
 return {
 	{
+		-- Only adding it because when inside tmux nvim is failing to set the background when the system changes
+		"f-person/auto-dark-mode.nvim",
+		opts = {},
+	},
+	{
 		"sainnhe/gruvbox-material",
 		lazy = false,
 		priority = 1000,
