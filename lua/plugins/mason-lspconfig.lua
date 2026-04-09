@@ -26,6 +26,7 @@ return {
 				"taplo",
 				"docker_language_server",
 				"lemminx",
+				"bashls",
 			},
 		})
 
@@ -37,6 +38,7 @@ return {
 				"prettierd",
 				"nixfmt",
 				"templ",
+				"shfmt",
 			},
 		})
 	end,

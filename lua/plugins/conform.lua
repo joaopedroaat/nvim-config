@@ -12,6 +12,8 @@ return {
 			css = { "prettierd" },
 			nix = { "nixfmt" },
 			templ = { "templ" },
+			bash = { "shfmt" },
+			sh = { "shfmt" },
 		},
 		format_on_save = function(bufnr)
 			-- Disable autoformat on certain filetypes
