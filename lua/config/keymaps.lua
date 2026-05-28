@@ -35,9 +35,7 @@ map("n", '<leader>"', "<cmd>split<cr>", { desc = "Split Window Horizontally" })
 -- Smart Kill: Try to close the split. If it's the last window, kill the buffer instead.
 map("n", "<leader>x", function()
 	local success = pcall(vim.api.nvim_win_close, 0, false)
-	if not success then
-		vim.cmd("bd")
-	end
+	if not success then vim.cmd("bd") end
 end, { desc = "Kill Split or Buffer" })
 
 -- Resize window using <ctrl> arrow keys
