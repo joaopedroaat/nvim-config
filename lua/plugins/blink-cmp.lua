@@ -1,42 +1,34 @@
-return {
-	"saghen/blink.cmp",
-	dependencies = { "rafamadriz/friendly-snippets" },
-	version = "1.*",
-	---@module 'blink.cmp'
-	---@type blink.cmp.Config
-	opts = {
-		keymap = { preset = "default" },
+vim.pack.add({
+	{ src = "https://github.com/rafamadriz/friendly-snippets" },
+	{ src = "https://github.com/saghen/blink.lib" },
+	{ src = "https://github.com/saghen/blink.cmp" },
+})
+local cmp = require("blink.cmp")
+cmp.build():wait(60000)
 
-		appearance = {
-			nerd_font_variant = "mono",
-		},
-
-		completion = { documentation = { auto_show = false } },
-
-		sources = {
-			default = { "lsp", "path", "snippets", "buffer" },
-			per_filetype = {
-				lua = { "lazydev", inherit_defaults = true },
-			},
-			providers = {
-				lazydev = {
-					name = "LazyDev",
-					module = "lazydev.integrations.blink",
-					-- make lazydev completions top priority (see `:h blink.cmp`)
-					score_offset = 100,
-				},
-				-- Tell blink to load HTML snippets in Templ files
-				snippets = {
-					opts = {
-						extended_filetypes = {
-							templ = { "html" },
-						},
-					},
-				},
-			},
-		},
-
-		fuzzy = { implementation = "prefer_rust_with_warning" },
+cmp.setup({
+	keymap = {
+		preset = "default",
 	},
-	opts_extend = { "sources.default" },
-}
+
+	completion = {
+		documentation = { auto_show = false },
+	},
+
+	sources = {
+		default = { "lazydev", "lsp", "path", "snippets", "buffer" },
+		providers = {
+			lazydev = {
+				name = "LazyDev",
+				module = "lazydev.integrations.blink",
+				-- make lazydev completions top priority (see `:h blink.cmp`)
+				score_offset = 100,
+			},
+		},
+	},
+
+	fuzzy = {
+		-- Uses the fast Rust matcher (requires running :BlinkBuild first)
+		implementation = "rust",
+	},
+})
