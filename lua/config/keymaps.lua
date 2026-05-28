@@ -73,3 +73,12 @@ map("n", "<C-f>", function()
 		vim.notify("Start tmux first to use the sessionizer!", vim.log.levels.WARN)
 	end
 end, { desc = "Tmux Sessionizer" })
+
+-- ==========================================
+-- Theme / UI
+-- ==========================================
+-- Pre-fills the command line so you can easily type a theme name
+map("n", "<leader>cp", ":ColorMyPencils ", { desc = "Color My Pencils (Pick Theme)" })
+
+-- Instantly resets to your default theme without prompting
+map("n", "<leader>cP", "<cmd>ColorMyPencils<cr>", { desc = "Reset Theme to Default" })
