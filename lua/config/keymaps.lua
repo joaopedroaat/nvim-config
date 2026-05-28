@@ -32,7 +32,15 @@ map("n", "<C-l>", "<C-w>l", { desc = "Go to Right Window", remap = true })
 map("n", "<leader>%", "<cmd>vsplit<cr>", { desc = "Split Window Vertically" })
 map("n", '<leader>"', "<cmd>split<cr>", { desc = "Split Window Horizontally" })
 
--- Resize window using <ctrl> arrow keys (Inversion fixed)
+-- Smart Kill: Try to close the split. If it's the last window, kill the buffer instead.
+map("n", "<leader>x", function()
+	local success = pcall(vim.api.nvim_win_close, 0, false)
+	if not success then
+		vim.cmd("bd")
+	end
+end, { desc = "Kill Split or Buffer" })
+
+-- Resize window using <ctrl> arrow keys
 map("n", "<C-Up>", "<cmd>resize +2<cr>", { desc = "Increase Window Height" })
 map("n", "<C-Down>", "<cmd>resize -2<cr>", { desc = "Decrease Window Height" })
 map("n", "<C-Left>", "<cmd>vertical resize +2<cr>", { desc = "Increase Window Width" })
