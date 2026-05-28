@@ -1,5 +1,4 @@
--- Lua setup (configured to recognize the 'vim' global for your dotfiles)
-vim.lsp.config("lua_ls", {
+return {
 	settings = {
 		Lua = {
 			diagnostics = {
@@ -7,4 +6,4 @@ vim.lsp.config("lua_ls", {
 			},
 		},
 	},
-})
+}
