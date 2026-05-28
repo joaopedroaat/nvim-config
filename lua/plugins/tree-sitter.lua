@@ -4,15 +4,6 @@ vim.pack.add({
 
 require("nvim-treesitter").setup({})
 
-vim.api.nvim_create_autocmd("FileType", {
-	callback = function()
-		-- Enable treesitter highlighting and disable regex syntax
-		pcall(vim.treesitter.start)
-		-- Enable treesitter-based indentation
-		vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
-	end,
-})
-
 local ensureInstalled = {
 	"lua",
 	"vim",
@@ -24,9 +15,30 @@ local parsersToInstall = vim.iter(ensureInstalled)
 	:totable()
 require("nvim-treesitter").install(parsersToInstall)
 
--- ==========================================
--- Treesitter Keymaps
--- ==========================================
+vim.api.nvim_create_autocmd("FileType", {
+	callback = function()
+		-- Enable treesitter highlighting and disable regex syntax
+		pcall(vim.treesitter.start)
+		-- Enable treesitter-based indentation
+		vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+	end,
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+	callback = function(ev)
+		local lang = vim.treesitter.language.get_lang(ev.match)
+		local available_langs = require("nvim-treesitter").get_available()
+		local is_available = vim.tbl_contains(available_langs, lang)
+		if is_available then
+			local installed_langs = require("nvim-treesitter").get_installed()
+			local installed = vim.tbl_contains(installed_langs, lang)
+			if not installed then require("nvim-treesitter").install(lang):wait() end
+			vim.treesitter.start()
+			require("nvim-treesitter").indentexpr()
+		end
+	end,
+})
+
 -- Interactive menu to seamlessly install/uninstall Tree-sitter parsers
 vim.keymap.set("n", "<leader>tm", function()
 	-- 1. Get currently installed parsers
