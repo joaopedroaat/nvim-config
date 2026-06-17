@@ -1,10 +1,7 @@
-vim.pack.add({
-	{ src = "https://github.com/rafamadriz/friendly-snippets" },
-	{ src = "https://github.com/saghen/blink.lib" },
-	{ src = "https://github.com/saghen/blink.cmp" },
-})
+vim.pack.add({ "https://github.com/saghen/blink.lib", "https://github.com/saghen/blink.cmp" })
+
 local cmp = require("blink.cmp")
-cmp.build():wait(60000)
+cmp.build():pwait()
 
 cmp.setup({
 	keymap = {
@@ -28,7 +25,6 @@ cmp.setup({
 	},
 
 	fuzzy = {
-		-- Uses the fast Rust matcher (requires running :BlinkBuild first)
-		implementation = "rust",
+		implementation = "lua",
 	},
 })
