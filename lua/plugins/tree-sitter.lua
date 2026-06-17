@@ -15,7 +15,11 @@ local parsersToInstall = vim.iter(ensureInstalled)
 	:totable()
 require("nvim-treesitter").install(parsersToInstall)
 
+local function augroup(name) return vim.api.nvim_create_augroup("treesitter_" .. name, { clear = true }) end
+
 vim.api.nvim_create_autocmd("FileType", {
+	group = augroup("highlight_indent"),
+	desc = "Enable treesitter highlighting/indent for the current buffer",
 	callback = function()
 		-- Enable treesitter highlighting and disable regex syntax
 		pcall(vim.treesitter.start)
@@ -25,73 +29,35 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 vim.api.nvim_create_autocmd("FileType", {
+	group = augroup("auto_install"),
+	desc = "Install missing parser for this filetype, then enable highlighting/indent",
 	callback = function(ev)
 		local lang = vim.treesitter.language.get_lang(ev.match)
 		local available_langs = require("nvim-treesitter").get_available()
 		local is_available = vim.tbl_contains(available_langs, lang)
-		if is_available then
-			local installed_langs = require("nvim-treesitter").get_installed()
-			local installed = vim.tbl_contains(installed_langs, lang)
-			if not installed then require("nvim-treesitter").install(lang):wait() end
+		if not is_available then return end
+
+		local installed_langs = require("nvim-treesitter").get_installed()
+		local installed = vim.tbl_contains(installed_langs, lang)
+		if installed then
 			vim.treesitter.start()
 			require("nvim-treesitter").indentexpr()
+			return
 		end
+
+		-- Install asynchronously so the buffer stays usable while it downloads/builds
+		require("nvim-treesitter").install(lang):await(function(err)
+			if err or not vim.api.nvim_buf_is_valid(ev.buf) then return end
+			vim.schedule(function()
+				vim.treesitter.start(ev.buf)
+				vim.bo[ev.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+			end)
+		end)
 	end,
 })
 
--- Interactive menu to seamlessly install/uninstall Tree-sitter parsers
-vim.keymap.set("n", "<leader>tm", function()
-	-- 1. Get currently installed parsers
-	local installed_list = require("nvim-treesitter.config").get_installed()
-	local installed_map = {}
-	for _, p in ipairs(installed_list) do
-		installed_map[p] = true
-	end
-
-	-- 2. Safely get all available parsers by querying Neovim's native command-line completion
-	local available = vim.fn.getcompletion("TSInstall ", "cmdline")
-
-	if #available == 0 then
-		vim.notify("Could not fetch parsers. Is Treesitter loaded?", vim.log.levels.ERROR)
-		return
-	end
-
-	-- 3. Build the UI list
-	local items = {}
-	for _, parser in ipairs(available) do
-		if installed_map[parser] then
-			table.insert(items, "✓ " .. parser)
-		else
-			table.insert(items, "✗ " .. parser)
-		end
-	end
-
-	-- 4. Sort the list: Installed (✓) at the top, then alphabetically
-	table.sort(items, function(a, b)
-		local a_inst = a:match("✓") ~= nil
-		local b_inst = b:match("✓") ~= nil
-		if a_inst ~= b_inst then return a_inst end
-		return a < b
-	end)
-
-	-- 5. Trigger the UI (fzf-lua will hijack this and open a visual picker)
-	vim.ui.select(items, {
-		prompt = "Toggle Tree-sitter Parsers (Enter to Install/Uninstall):",
-	}, function(choice)
-		-- Exit if the user presses Escape
-		if not choice then return end
-
-		-- Extract the status and parser name using Lua pattern matching
-		local is_installed = choice:match("✓") ~= nil
-		local parser = choice:match("%s(.+)$") -- Grabs everything after the space
-
-		-- 6. Execute the toggle
-		if is_installed then
-			vim.notify("Uninstalling " .. parser .. "...", vim.log.levels.WARN)
-			vim.cmd("TSUninstall " .. parser)
-		else
-			vim.notify("Installing " .. parser .. "...", vim.log.levels.INFO)
-			vim.cmd("TSInstall " .. parser)
-		end
-	end)
-end, { desc = "Treesitter Menu (Install/Uninstall)" })
+vim.api.nvim_create_user_command("TSInstalled", function()
+	local installed = require("nvim-treesitter").get_installed()
+	table.sort(installed)
+	vim.notify("Installed parsers (" .. #installed .. "):\n" .. table.concat(installed, ", "), vim.log.levels.INFO)
+end, { desc = "List installed treesitter parsers" })
