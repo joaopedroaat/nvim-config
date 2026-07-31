@@ -1,4 +1,8 @@
-vim.pack.add({ "https://github.com/saghen/blink.lib", "https://github.com/saghen/blink.cmp" })
+vim.pack.add({
+	"https://github.com/saghen/blink.lib",
+	"https://github.com/saghen/blink.cmp",
+	"https://github.com/rafamadriz/friendly-snippets",
+})
 
 local cmp = require("blink.cmp")
 cmp.build()
@@ -20,6 +24,11 @@ cmp.setup({
 				module = "lazydev.integrations.blink",
 				-- make lazydev completions top priority (see `:h blink.cmp`)
 				score_offset = 100,
+			},
+			snippets = {
+				opts = {
+					extended_filetypes = { templ = { "html" } },
+				},
 			},
 		},
 	},

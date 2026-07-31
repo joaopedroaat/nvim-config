@@ -17,14 +17,25 @@ require("nvim-treesitter").install(parsersToInstall)
 
 local function augroup(name) return vim.api.nvim_create_augroup("treesitter_" .. name, { clear = true }) end
 
+-- Some parsers (e.g. templ) ship no indents.scm query. In that case
+-- nvim-treesitter's indentexpr() always returns 0, which clobbers Neovim's
+-- built-in autoindent/smartindent fallback instead of deferring to it.
+local function set_indentexpr(bufnr, lang)
+	if lang and vim.treesitter.query.get(lang, "indents") then
+		vim.bo[bufnr].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+	else
+		vim.bo[bufnr].indentexpr = ""
+	end
+end
+
 vim.api.nvim_create_autocmd("FileType", {
 	group = augroup("highlight_indent"),
 	desc = "Enable treesitter highlighting/indent for the current buffer",
-	callback = function()
+	callback = function(ev)
 		-- Enable treesitter highlighting and disable regex syntax
 		pcall(vim.treesitter.start)
-		-- Enable treesitter-based indentation
-		vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+		-- Enable treesitter-based indentation, if the language has an indent query
+		set_indentexpr(ev.buf, vim.treesitter.language.get_lang(ev.match))
 	end,
 })
 
@@ -41,7 +52,7 @@ vim.api.nvim_create_autocmd("FileType", {
 		local installed = vim.tbl_contains(installed_langs, lang)
 		if installed then
 			vim.treesitter.start()
-			require("nvim-treesitter").indentexpr()
+			set_indentexpr(ev.buf, lang)
 			return
 		end
 
@@ -50,7 +61,7 @@ vim.api.nvim_create_autocmd("FileType", {
 			if err or not vim.api.nvim_buf_is_valid(ev.buf) then return end
 			vim.schedule(function()
 				vim.treesitter.start(ev.buf)
-				vim.bo[ev.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+				set_indentexpr(ev.buf, lang)
 			end)
 		end)
 	end,
